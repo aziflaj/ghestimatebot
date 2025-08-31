@@ -6,8 +6,6 @@ import (
 	"github.com/aziflaj/ghestimatebot/internal/ghestimatebot"
 )
 
-var re = ghestimatebot.EstimateRe
-
 func TestEstimateRegex(t *testing.T) {
 	tests := []struct {
 		in string
@@ -17,14 +15,15 @@ func TestEstimateRegex(t *testing.T) {
 		{"estimate: 5 days", true},
 		{"Estimate:2 days", true},
 		{"Estimate:2days", true},
-		{"Estimate: 0 days", true},
+		{"Estimate: 0 days", false},
 		{"Estimate: some days", false},
 		{"Estimate: days", false},
 		{"Estimate: 3 day", false},
+		{"Estimate: 1 day", true},
 		{"No estimate here", false},
 	}
 	for _, tt := range tests {
-		if got := re.MatchString(tt.in); got != tt.ok {
+		if got := ghestimatebot.HasEstimate(tt.in); got != tt.ok {
 			t.Fatalf("%q => got %v want %v", tt.in, got, tt.ok)
 		}
 	}

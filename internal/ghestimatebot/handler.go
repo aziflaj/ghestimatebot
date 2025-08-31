@@ -14,13 +14,13 @@ import (
 )
 
 var (
-	EstimateRe = regexp.MustCompile(`(?i)\bEstimate:\s*(\d+)\s*days\b`)
+	estimateRe = regexp.MustCompile(`(?i)\bEstimate:\s*(\d+)\s*(days?)\b`)
 
 	commentTpl = `
 		Thanks for opening this issue, @%s!
 
-		To help with planning, please add an estimate in the form **Estimate: X days**
-		to the issue description (e.g., **Estimate: 2 days**).
+		To help with planning, please add an estimate in the form **Estimate: X day(s)**
+		to the issue description (e.g., **Estimate: 1 day** or **Estimate: 2 days**).
 	`
 )
 
@@ -63,7 +63,7 @@ func (h *EventHandler) HandleWebhook(w http.ResponseWriter, r *http.Request) {
 		}
 
 		body := issue.GetBody()
-		if hasEstimate(body) {
+		if HasEstimate(body) {
 			break
 		}
 
@@ -114,6 +114,17 @@ func clientForInstallation(appIDStr, pkPath string, installationID int64) (*gh.C
 	return client, nil
 }
 
-func hasEstimate(body string) bool {
-	return EstimateRe.FindStringSubmatch(body) != nil
+func HasEstimate(body string) bool {
+	m := estimateRe.FindStringSubmatch(body)
+	if m == nil {
+		return false
+	}
+
+	numDays, err := strconv.Atoi(m[1])
+	if err != nil || numDays <= 0 {
+		return false
+	}
+
+	daysLiteral := m[2]
+	return (daysLiteral == "day" && numDays == 1) || (daysLiteral == "days" && numDays >= 2)
 }
