@@ -96,9 +96,6 @@ func (h *EventHandler) HandleWebhook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-
-	slog.Info("Received webhook", "method", r.Method, "path", r.URL.Path, "payload", string(payload))
-	w.WriteHeader(http.StatusOK)
 }
 
 func clientForInstallation(appIDStr, pkPath string, installationID int64) (*gh.Client, error) {
