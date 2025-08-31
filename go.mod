@@ -1,4 +1,4 @@
-module github.com/aziflaj/ghbot
+module github.com/aziflaj/ghestimatebot
 
 go 1.25.0
 

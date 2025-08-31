@@ -1,13 +1,13 @@
 .PHONY: run test build docker
 
 run:
-	go run ./cmd/ghbot/main.go
+	go run ./cmd/ghestimatebot/main.go
 
 test:
 	go test ./...
 
 build:
-	go build -o bin/ghbot ./cmd/ghbot/main.go
+	go build -o bin/ghestimatebot ./cmd/ghestimatebot/main.go
 
 docker:
-	docker build -t ghbot:latest .
+	docker build -t ghestimatebot:latest .

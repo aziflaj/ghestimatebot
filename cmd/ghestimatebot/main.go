@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/aziflaj/ghbot/internal/ghbot"
+	"github.com/aziflaj/ghestimatebot/internal/ghestimatebot"
 	"github.com/joho/godotenv"
 )
 
@@ -34,11 +34,11 @@ func main() {
 		cancel()
 	}()
 
-	// read port from env
-	port, ok := os.LookupEnv("PORT")
-	if !ok {
-		port = "8080"
+	cfg, err := ghestimatebot.LoadConfigFromEnv()
+	if err != nil {
+		slog.Error("Failed to load config", "error", err)
+		return
 	}
 
-	ghbot.Run(ctx, ":"+port)
+	ghestimatebot.Run(ctx, cfg)
 }

@@ -1,4 +1,4 @@
-package ghbot
+package ghestimatebot
 
 import (
 	"log/slog"

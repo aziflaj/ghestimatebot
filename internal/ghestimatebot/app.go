@@ -1,4 +1,4 @@
-package ghbot
+package ghestimatebot
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func Run(ctx context.Context, port string) {
-	server := NewServer(port)
+func Run(ctx context.Context, cfg *Config) {
+	server := NewServer(cfg)
 	go server.Start(ctx)
 
 	<-ctx.Done()
